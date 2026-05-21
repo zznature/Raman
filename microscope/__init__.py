@@ -1,0 +1,1 @@
+"""Microscope camera acquisition package."""

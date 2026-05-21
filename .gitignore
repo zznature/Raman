@@ -1,0 +1,14 @@
+# Python related
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# IDE related
+.vscode/
+.idea/
+.cursor/
+
+# Runtime artifacts
+*.log
