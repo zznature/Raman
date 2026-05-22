@@ -6,3 +6,4 @@ tifffile>=2022.5.4
 pyserial>=3.5
 PyMuPDF>=1.23.0
 pywin32>=306; platform_system == "Windows"
+pytest>=8.0.0

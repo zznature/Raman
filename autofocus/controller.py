@@ -95,7 +95,7 @@ class AutofocusController:
             )
         median_score = statistics.median(coarse_scores)
         prominence = (coarse_scores[argmax_index] - median_score) / (median_score + 1e-9)
-        if prominence < 0.2:
+        if prominence < params.coarse_min_prominence:
             return self._result_error(
                 FocusStatus.NO_PEAK,
                 "Focus curve too flat — likely low texture; try a different ROI.",

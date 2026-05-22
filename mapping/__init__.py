@@ -1,7 +1,14 @@
 """Offline-first Raman mapping orchestration utilities."""
 
 from mapping.focus_plane import FocusAnchor, FocusPlane, fit_focus_plane
-from mapping.labspec import FakeRamanAcquirer, RamanAcquirer
+from mapping.labspec import (
+    FakeRamanAcquirer,
+    LabSpecAcquisitionConfig,
+    LabSpecComRamanAcquirer,
+    LabSpecFileBridgeRamanAcquirer,
+    LabSpecWorkerAcquisitionConfig,
+    RamanAcquirer,
+)
 from mapping.models import AcquisitionResult, MappingGrid, MappingPoint, PointRecord, PointStatus
 from mapping.planner import rect_grid
 from mapping.records import JsonlRunRecorder, read_jsonl_records
@@ -13,12 +20,16 @@ __all__ = [
     "FocusAnchor",
     "FocusPlane",
     "JsonlRunRecorder",
+    "LabSpecAcquisitionConfig",
+    "LabSpecComRamanAcquirer",
+    "LabSpecFileBridgeRamanAcquirer",
     "MappingGrid",
     "MappingPoint",
     "MappingRunner",
     "PointRecord",
     "PointStatus",
     "RamanAcquirer",
+    "LabSpecWorkerAcquisitionConfig",
     "fit_focus_plane",
     "read_jsonl_records",
     "rect_grid",

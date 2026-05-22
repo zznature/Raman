@@ -114,6 +114,7 @@ class AutofocusParams:
 
     # Quality thresholds
     min_confidence: float = 0.2
+    coarse_min_prominence: float = 0.2
     max_saturation_ratio: float = 0.01
 
     # Metric selection

@@ -36,4 +36,4 @@ def test_connect_rejects_non_newton_idn(monkeypatch):
         controller.connect()
 
     assert fake.closed is True
-    assert fake.writes == ["[*IDN?]"]
+    assert fake.writes == ["[*IDN?]", "[*IDN?]", "[*IDN?]"]

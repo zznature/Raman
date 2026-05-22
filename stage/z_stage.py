@@ -19,6 +19,8 @@ class ZStageController:
         channel: int = 3,
         read_timeout: float = 1.0,
         default_cmd_wait_ms: float = 5.0,
+        idn_wait_ms: float = 100.0,
+        idn_retries: int = 3,
         move_cmd_wait_ms: float = 30.0,
         channel_switch_wait_ms: float = 100.0,
     ):
@@ -28,6 +30,8 @@ class ZStageController:
         self._channel = channel
         self._read_timeout = read_timeout
         self._default_cmd_wait_ms = default_cmd_wait_ms
+        self._idn_wait_ms = idn_wait_ms
+        self._idn_retries = idn_retries
         self._move_cmd_wait_ms = move_cmd_wait_ms
         self._channel_switch_wait_ms = channel_switch_wait_ms
         self._ser = None
@@ -54,7 +58,11 @@ class ZStageController:
             timeout=self._read_timeout,
         )
 
-        idn = self._send("[*IDN?]", wait_ms=10.0)
+        idn = ""
+        for _ in range(max(1, self._idn_retries)):
+            idn = self._send("[*IDN?]", wait_ms=self._idn_wait_ms)
+            if idn and "Newton" in idn:
+                break
         if not idn or "Newton" not in idn:
             self._ser.close()
             raise StageConnectionError(

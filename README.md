@@ -24,7 +24,6 @@ Install dependencies:
 
 ```powershell
 pip install -r requirements.txt
-pip install pytest
 ```
 
 If IDS DLLs are not in the default location:
