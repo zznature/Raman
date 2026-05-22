@@ -34,6 +34,10 @@ DLL 文件目录: `C:\Program Files\IDS\uEye\develop\bin`.
 
 初始功能设计: 基础采集功能 + 简单 GUI + 模块化项目结构.
 
+## 采集Spectrum
+
+配置采集参数和采集模式，完成采集Spectrum.
+
 ## 自动对焦(Autofocus)
 
 ### 目标
