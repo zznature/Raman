@@ -64,6 +64,10 @@ and writes:
 raman/runtime/labspec_bridge/spectrum_result.ini
 ```
 
+For a one-shot run, start `assets/labspec_scripts/spectrum_once.vbs` inside LabSpec
+after the request file is written. The script now waits briefly for
+`spectrum_request.ini`, then consumes one request and exits.
+
 Submit one externally configured request:
 
 ```powershell

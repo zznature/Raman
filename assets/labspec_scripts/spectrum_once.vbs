@@ -1,8 +1,8 @@
 ' LabSpec-internal one-shot spectrum acquisition bridge.
 '
 ' Run this script inside LabSpec after an external program writes
-' spectrum_request.ini. It reads one request, performs one acquisition, writes
-' spectrum_result.ini, then exits.
+' spectrum_request.ini. It waits briefly for the request file, performs one
+' acquisition, writes spectrum_result.ini, then exits.
 
 Option Explicit
 
@@ -20,7 +20,7 @@ RESULT_PATH = "D:\RamanLab\RamanLab\raman\runtime\labspec_bridge\spectrum_result
 Dim Fso
 Set Fso = CreateObject("Scripting.FileSystemObject")
 
-If Not Fso.FileExists(REQUEST_PATH) Then
+If Not WaitForRequest(REQUEST_PATH, 3000, 100) Then
   WriteFailure "", "missing_request", "Request file does not exist: " & REQUEST_PATH
   LabSpec.Message "Spectrum once: missing request", 6
 Else
@@ -75,6 +75,19 @@ Else
   End If
   LabSpec.Message "Spectrum once done: " & CStr(DataID), 6
 End If
+
+Function WaitForRequest(Path, TimeoutMs, PollMs)
+  Dim Deadline
+  Deadline = LabSpec.TickCount() + TimeoutMs
+  Do
+    If Fso.FileExists(Path) Then
+      WaitForRequest = True
+      Exit Function
+    End If
+    LabSpec.Pause PollMs
+  Loop Until LabSpec.TickCount() >= Deadline
+  WaitForRequest = False
+End Function
 
 Function ReadKeyValueFile(Path)
   Dim Dict
