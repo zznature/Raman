@@ -89,3 +89,44 @@ raman/runtime/labspec_bridge/spectrum_worker.stop
 This keeps the actual `LabSpec.Acq` and `LabSpec.GetAcqID` calls inside the
 LabSpec VBS context, which has been verified to acquire successfully, while still
 allowing external parameter control.
+
+## Continuous worker mode
+
+`assets/labspec_scripts/spectrum_worker.vbs` supports two request styles:
+
+By default, the worker resolves the bridge directory relative to the script file:
+`assets/labspec_scripts/spectrum_worker.vbs` -> `runtime/labspec_bridge`. If the
+LabSpec script host does not expose `WScript.ScriptFullName`, set the
+`RAMANLAB_BRIDGE_DIR` environment variable to the absolute bridge directory
+before starting LabSpec.
+
+- Legacy single-request path:
+  - request: `raman/runtime/labspec_bridge/spectrum_request.ini`
+  - result: `raman/runtime/labspec_bridge/spectrum_result.ini`
+- Queued continuous path:
+  - requests: `raman/runtime/labspec_bridge/requests/*.ini`
+  - processing: claimed files are moved to `raman/runtime/labspec_bridge/processing/`
+  - results: `raman/runtime/labspec_bridge/results/<request_id>.ini`
+  - failed requests: original request files are moved to `raman/runtime/labspec_bridge/failed/`
+
+For queued mode, write each request as a temporary file and atomically rename it
+to `.ini` only after the content is complete. Each request should include a
+unique `request_id`; otherwise the worker falls back to the request filename.
+
+Supported request keys:
+
+```ini
+request_id=point_0001
+integration_time_s=1
+accumulations=1
+from_nm=0
+to_nm=0
+auto_show=1
+save_path=D:\download\RamanLab\RamanLab\raman\runtime\labspec_bridge\spectra\point_0001.txt
+save_format=txt
+timeout_ms=30000
+```
+
+The worker uses `LabSpec.Pause` in idle and acquisition polling loops. It also
+times out `GetAcqID()` and writes an error result instead of waiting forever,
+which avoids the most common LabSpec UI freeze caused by tight VBS loops.
